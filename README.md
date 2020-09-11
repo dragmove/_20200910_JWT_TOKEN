@@ -1,12 +1,12 @@
-# BOILERPLATE_TYPESCRIPT_EXPRESS
+# \_20200910_JWT_TOKEN
 
 ## About
 
-BOILERPLATE_TYPESCRIPT_EXPRESS
+\_20200910_JWT_TOKEN
 
 ## NPM tasks
 
-- \$ npm run start:watch  
+- \$ npm run start  
   After run, connect http://localhost:9001/
 
 ## Contact
