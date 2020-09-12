@@ -32,49 +32,16 @@ app.listen(PORT, () => {
 });
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello JWT');
+  res.send('Hello 9001 server :)');
 });
 
-// 1. Call /login api setting
-// [Header] Key: 'Content-Type', Value: 'application/json'
-// [Body] { "id": "winter", "password": "8888" }
-// After calling /login, you could get { "accessToken": "JWT_TOKEN_STRING" }
-app.post('/login', (req: Request, res: Response) => {
-  // Authentication
-  const { id, password } = req.body;
-
-  // Find a user in database
-  let filteredUser: UserType[] = users.filter((_user) => _user.id === id && _user.password === password);
-  if (!filteredUser.length) {
-    log(chalk.bgRed('/login. There is not a user matched in this database'));
-    res.sendStatus(404);
-  }
-
-  const user: UserType = filteredUser[0];
-  log(chalk.cyan('call /login. user :', user.id, user.password));
-
-  // ACCESS_TOKEN_SECRET_KEY value is in .env file.
-  const secretKey: string = process.env.ACCESS_TOKEN_SECRET_KEY || '';
-  if (!secretKey) {
-    throw new Error('Access token secret key is not defined.');
-  }
-
-  // create JWT Token using secret key
-  const accessToken = jwt.sign(
-    {
-      id: user.id,
-    },
-    secretKey
-  );
-  log(chalk.red('JWT Token :', accessToken));
-  res.json({ accessToken });
-});
-
-// 2. Call /user api setting
+// + 2 and 4. Call /user api setting
 // [Headers] Key: 'Authorization', Value: 'Bearer JWT_TOKEN_STRING'
 // After calling /user, you could get { "id": "winter" }
+// This JWT Token will be expired after 30s.
+// You need to get new JWT Access Token by calling /token api.
 app.get('/user', authenticateTokenMiddleware, (req: GetUserRequest, res: Response) => {
-  log(chalk.cyan('call /user'));
+  log(chalk.cyan('call /user on 9001 server'));
 
   const filteredUser = users.filter((_user) => _user.id === req.user.id || '');
   if (!filteredUser.length) {
@@ -99,7 +66,7 @@ function authenticateTokenMiddleware(req: GetUserRequest, res: Response, next: N
   const secretKey: string = process.env.ACCESS_TOKEN_SECRET_KEY || '';
   jwt.verify(token, secretKey, (error: any, user: any) => {
     if (error) {
-      return res.sendStatus(500);
+      return res.sendStatus(403);
     }
 
     log(chalk.green('authenticationTokenMiddleware. user :', user));

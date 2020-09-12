@@ -6,7 +6,7 @@
 
 ## NPM tasks
 
-- \$ npm run start  
+- \$ npm run start:dev or yarn start:dev
   After run, connect http://localhost:9001/
 
 ## Contact

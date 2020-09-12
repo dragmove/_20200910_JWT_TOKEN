@@ -6,5 +6,5 @@ export interface GetUserRequest extends Request {
 
 export interface UserType {
   id: string;
-  password: string;
+  password?: string;
 }
